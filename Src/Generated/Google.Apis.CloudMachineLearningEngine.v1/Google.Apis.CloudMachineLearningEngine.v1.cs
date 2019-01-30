@@ -26,7 +26,7 @@
  *      <tr><th>API
  *          <td><a href='https://cloud.google.com/ml/'>Cloud Machine Learning Engine</a>
  *      <tr><th>API Version<td>v1
- *      <tr><th>API Rev<td>20181215 (1444)
+ *      <tr><th>API Rev<td>20190123 (1483)
  *      <tr><th>API Docs
  *          <td><a href='https://cloud.google.com/ml/'>
  *              https://cloud.google.com/ml/</a>
@@ -64,6 +64,7 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
         public CloudMachineLearningEngineService(Google.Apis.Services.BaseClientService.Initializer initializer)
             : base(initializer)
         {
+            operations = new OperationsResource(this);
             projects = new ProjectsResource(this);
         }
 
@@ -114,6 +115,14 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
         }
 
 
+
+        private readonly OperationsResource operations;
+
+        /// <summary>Gets the Operations resource.</summary>
+        public virtual OperationsResource Operations
+        {
+            get { return operations; }
+        }
 
         private readonly ProjectsResource projects;
 
@@ -310,6 +319,87 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
                     DefaultValue = null,
                     Pattern = null,
                 });
+        }
+    }
+
+    /// <summary>The "operations" collection of methods.</summary>
+    public class OperationsResource
+    {
+        private const string Resource = "operations";
+
+        /// <summary>The service which this resource belongs to.</summary>
+        private readonly Google.Apis.Services.IClientService service;
+
+        /// <summary>Constructs a new resource.</summary>
+        public OperationsResource(Google.Apis.Services.IClientService service)
+        {
+            this.service = service;
+
+        }
+
+
+        /// <summary>Deletes a long-running operation. This method indicates that the client is no longer interested in
+        /// the operation result. It does not cancel the operation. If the server doesn't support this method, it
+        /// returns `google.rpc.Code.UNIMPLEMENTED`.</summary>
+        /// <param name="name">The name of the operation resource to be deleted.</param>
+        public virtual DeleteRequest Delete(string name)
+        {
+            return new DeleteRequest(service, name);
+        }
+
+        /// <summary>Deletes a long-running operation. This method indicates that the client is no longer interested in
+        /// the operation result. It does not cancel the operation. If the server doesn't support this method, it
+        /// returns `google.rpc.Code.UNIMPLEMENTED`.</summary>
+        public class DeleteRequest : CloudMachineLearningEngineBaseServiceRequest<Google.Apis.CloudMachineLearningEngine.v1.Data.GoogleProtobufEmpty>
+        {
+            /// <summary>Constructs a new Delete request.</summary>
+            public DeleteRequest(Google.Apis.Services.IClientService service, string name)
+                : base(service)
+            {
+                Name = name;
+                InitParameters();
+            }
+
+
+            /// <summary>The name of the operation resource to be deleted.</summary>
+            [Google.Apis.Util.RequestParameterAttribute("name", Google.Apis.Util.RequestParameterType.Path)]
+            public virtual string Name { get; private set; }
+
+
+            ///<summary>Gets the method name.</summary>
+            public override string MethodName
+            {
+                get { return "delete"; }
+            }
+
+            ///<summary>Gets the HTTP method.</summary>
+            public override string HttpMethod
+            {
+                get { return "DELETE"; }
+            }
+
+            ///<summary>Gets the REST path.</summary>
+            public override string RestPath
+            {
+                get { return "v1/{+name}"; }
+            }
+
+            /// <summary>Initializes Delete parameter list.</summary>
+            protected override void InitParameters()
+            {
+                base.InitParameters();
+
+                RequestParameters.Add(
+                    "name", new Google.Apis.Discovery.Parameter
+                    {
+                        Name = "name",
+                        IsRequired = true,
+                        ParameterType = "path",
+                        DefaultValue = null,
+                        Pattern = @"^operations/.+$",
+                    });
+            }
+
         }
     }
 
@@ -645,14 +735,6 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
                 [Google.Apis.Util.RequestParameterAttribute("parent", Google.Apis.Util.RequestParameterType.Path)]
                 public virtual string Parent { get; private set; }
 
-                /// <summary>Optional. Specifies the subset of jobs to retrieve. You can filter on the value of one or
-                /// more attributes of the job object. For example, retrieve jobs with a job identifier that starts with
-                /// 'census': gcloud ml-engine jobs list --filter='jobId:census*' List all failed jobs with names that
-                /// start with 'rnn': gcloud ml-engine jobs list --filter='jobId:rnn* AND state:FAILED' For more
-                /// examples, see the guide to monitoring jobs.</summary>
-                [Google.Apis.Util.RequestParameterAttribute("filter", Google.Apis.Util.RequestParameterType.Query)]
-                public virtual string Filter { get; set; }
-
                 /// <summary>Optional. A page token to request the next page of results.
                 ///
                 /// You get the token from the `next_page_token` field of the response from the previous call.</summary>
@@ -666,6 +748,14 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
                 /// The default value is 20, and the maximum page size is 100.</summary>
                 [Google.Apis.Util.RequestParameterAttribute("pageSize", Google.Apis.Util.RequestParameterType.Query)]
                 public virtual System.Nullable<int> PageSize { get; set; }
+
+                /// <summary>Optional. Specifies the subset of jobs to retrieve. You can filter on the value of one or
+                /// more attributes of the job object. For example, retrieve jobs with a job identifier that starts with
+                /// 'census': gcloud ml-engine jobs list --filter='jobId:census*' List all failed jobs with names that
+                /// start with 'rnn': gcloud ml-engine jobs list --filter='jobId:rnn* AND state:FAILED' For more
+                /// examples, see the guide to monitoring jobs.</summary>
+                [Google.Apis.Util.RequestParameterAttribute("filter", Google.Apis.Util.RequestParameterType.Query)]
+                public virtual string Filter { get; set; }
 
 
                 ///<summary>Gets the method name.</summary>
@@ -701,15 +791,6 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
                             Pattern = @"^projects/[^/]+$",
                         });
                     RequestParameters.Add(
-                        "filter", new Google.Apis.Discovery.Parameter
-                        {
-                            Name = "filter",
-                            IsRequired = false,
-                            ParameterType = "query",
-                            DefaultValue = null,
-                            Pattern = null,
-                        });
-                    RequestParameters.Add(
                         "pageToken", new Google.Apis.Discovery.Parameter
                         {
                             Name = "pageToken",
@@ -722,6 +803,15 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
                         "pageSize", new Google.Apis.Discovery.Parameter
                         {
                             Name = "pageSize",
+                            IsRequired = false,
+                            ParameterType = "query",
+                            DefaultValue = null,
+                            Pattern = null,
+                        });
+                    RequestParameters.Add(
+                        "filter", new Google.Apis.Discovery.Parameter
+                        {
+                            Name = "filter",
                             IsRequired = false,
                             ParameterType = "query",
                             DefaultValue = null,
@@ -1461,6 +1551,10 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
                     [Google.Apis.Util.RequestParameterAttribute("parent", Google.Apis.Util.RequestParameterType.Path)]
                     public virtual string Parent { get; private set; }
 
+                    /// <summary>Optional. Specifies the subset of versions to retrieve.</summary>
+                    [Google.Apis.Util.RequestParameterAttribute("filter", Google.Apis.Util.RequestParameterType.Query)]
+                    public virtual string Filter { get; set; }
+
                     /// <summary>Optional. A page token to request the next page of results.
                     ///
                     /// You get the token from the `next_page_token` field of the response from the previous
@@ -1475,10 +1569,6 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
                     /// The default value is 20, and the maximum page size is 100.</summary>
                     [Google.Apis.Util.RequestParameterAttribute("pageSize", Google.Apis.Util.RequestParameterType.Query)]
                     public virtual System.Nullable<int> PageSize { get; set; }
-
-                    /// <summary>Optional. Specifies the subset of versions to retrieve.</summary>
-                    [Google.Apis.Util.RequestParameterAttribute("filter", Google.Apis.Util.RequestParameterType.Query)]
-                    public virtual string Filter { get; set; }
 
 
                     ///<summary>Gets the method name.</summary>
@@ -1514,6 +1604,15 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
                                 Pattern = @"^projects/[^/]+/models/[^/]+$",
                             });
                         RequestParameters.Add(
+                            "filter", new Google.Apis.Discovery.Parameter
+                            {
+                                Name = "filter",
+                                IsRequired = false,
+                                ParameterType = "query",
+                                DefaultValue = null,
+                                Pattern = null,
+                            });
+                        RequestParameters.Add(
                             "pageToken", new Google.Apis.Discovery.Parameter
                             {
                                 Name = "pageToken",
@@ -1526,15 +1625,6 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
                             "pageSize", new Google.Apis.Discovery.Parameter
                             {
                                 Name = "pageSize",
-                                IsRequired = false,
-                                ParameterType = "query",
-                                DefaultValue = null,
-                                Pattern = null,
-                            });
-                        RequestParameters.Add(
-                            "filter", new Google.Apis.Discovery.Parameter
-                            {
-                                Name = "filter",
                                 IsRequired = false,
                                 ParameterType = "query",
                                 DefaultValue = null,
@@ -2025,10 +2115,6 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
                 [Google.Apis.Util.RequestParameterAttribute("parent", Google.Apis.Util.RequestParameterType.Path)]
                 public virtual string Parent { get; private set; }
 
-                /// <summary>Optional. Specifies the subset of models to retrieve.</summary>
-                [Google.Apis.Util.RequestParameterAttribute("filter", Google.Apis.Util.RequestParameterType.Query)]
-                public virtual string Filter { get; set; }
-
                 /// <summary>Optional. A page token to request the next page of results.
                 ///
                 /// You get the token from the `next_page_token` field of the response from the previous call.</summary>
@@ -2042,6 +2128,10 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
                 /// The default value is 20, and the maximum page size is 100.</summary>
                 [Google.Apis.Util.RequestParameterAttribute("pageSize", Google.Apis.Util.RequestParameterType.Query)]
                 public virtual System.Nullable<int> PageSize { get; set; }
+
+                /// <summary>Optional. Specifies the subset of models to retrieve.</summary>
+                [Google.Apis.Util.RequestParameterAttribute("filter", Google.Apis.Util.RequestParameterType.Query)]
+                public virtual string Filter { get; set; }
 
 
                 ///<summary>Gets the method name.</summary>
@@ -2077,15 +2167,6 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
                             Pattern = @"^projects/[^/]+$",
                         });
                     RequestParameters.Add(
-                        "filter", new Google.Apis.Discovery.Parameter
-                        {
-                            Name = "filter",
-                            IsRequired = false,
-                            ParameterType = "query",
-                            DefaultValue = null,
-                            Pattern = null,
-                        });
-                    RequestParameters.Add(
                         "pageToken", new Google.Apis.Discovery.Parameter
                         {
                             Name = "pageToken",
@@ -2098,6 +2179,15 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
                         "pageSize", new Google.Apis.Discovery.Parameter
                         {
                             Name = "pageSize",
+                            IsRequired = false,
+                            ParameterType = "query",
+                            DefaultValue = null,
+                            Pattern = null,
+                        });
+                    RequestParameters.Add(
+                        "filter", new Google.Apis.Discovery.Parameter
+                        {
+                            Name = "filter",
                             IsRequired = false,
                             ParameterType = "query",
                             DefaultValue = null,
@@ -2426,70 +2516,6 @@ namespace Google.Apis.CloudMachineLearningEngine.v1
                 }
 
                 /// <summary>Initializes Cancel parameter list.</summary>
-                protected override void InitParameters()
-                {
-                    base.InitParameters();
-
-                    RequestParameters.Add(
-                        "name", new Google.Apis.Discovery.Parameter
-                        {
-                            Name = "name",
-                            IsRequired = true,
-                            ParameterType = "path",
-                            DefaultValue = null,
-                            Pattern = @"^projects/[^/]+/operations/[^/]+$",
-                        });
-                }
-
-            }
-
-            /// <summary>Deletes a long-running operation. This method indicates that the client is no longer interested
-            /// in the operation result. It does not cancel the operation. If the server doesn't support this method, it
-            /// returns `google.rpc.Code.UNIMPLEMENTED`.</summary>
-            /// <param name="name">The name of the operation resource to be deleted.</param>
-            public virtual DeleteRequest Delete(string name)
-            {
-                return new DeleteRequest(service, name);
-            }
-
-            /// <summary>Deletes a long-running operation. This method indicates that the client is no longer interested
-            /// in the operation result. It does not cancel the operation. If the server doesn't support this method, it
-            /// returns `google.rpc.Code.UNIMPLEMENTED`.</summary>
-            public class DeleteRequest : CloudMachineLearningEngineBaseServiceRequest<Google.Apis.CloudMachineLearningEngine.v1.Data.GoogleProtobufEmpty>
-            {
-                /// <summary>Constructs a new Delete request.</summary>
-                public DeleteRequest(Google.Apis.Services.IClientService service, string name)
-                    : base(service)
-                {
-                    Name = name;
-                    InitParameters();
-                }
-
-
-                /// <summary>The name of the operation resource to be deleted.</summary>
-                [Google.Apis.Util.RequestParameterAttribute("name", Google.Apis.Util.RequestParameterType.Path)]
-                public virtual string Name { get; private set; }
-
-
-                ///<summary>Gets the method name.</summary>
-                public override string MethodName
-                {
-                    get { return "delete"; }
-                }
-
-                ///<summary>Gets the HTTP method.</summary>
-                public override string HttpMethod
-                {
-                    get { return "DELETE"; }
-                }
-
-                ///<summary>Gets the REST path.</summary>
-                public override string RestPath
-                {
-                    get { return "v1/{+name}"; }
-                }
-
-                /// <summary>Initializes Delete parameter list.</summary>
                 protected override void InitParameters()
                 {
                     base.InitParameters();
@@ -2854,11 +2880,11 @@ namespace Google.Apis.CloudMachineLearningEngine.v1.Data
     /// to work unchanged.</summary>
     public class GoogleApiHttpBody : Google.Apis.Requests.IDirectResponseSchema
     {
-        /// <summary>The HTTP Content-Type string representing the content type of the body.</summary>
+        /// <summary>The HTTP Content-Type header value specifying the content type of the body.</summary>
         [Newtonsoft.Json.JsonPropertyAttribute("contentType")]
         public virtual string ContentType { get; set; } 
 
-        /// <summary>HTTP body binary data.</summary>
+        /// <summary>The HTTP request/response body as raw binary.</summary>
         [Newtonsoft.Json.JsonPropertyAttribute("data")]
         public virtual string Data { get; set; } 
 
@@ -3357,7 +3383,7 @@ namespace Google.Apis.CloudMachineLearningEngine.v1.Data
         public virtual string ETag { get; set; }
     }    
 
-    /// <summary>Represents input parameters for a prediction job. Next field: 20</summary>
+    /// <summary>Represents input parameters for a prediction job.</summary>
     public class GoogleCloudMlV1PredictionInput : Google.Apis.Requests.IDirectResponseSchema
     {
         /// <summary>Optional. The type and number of accelerators to be attached to each machine running the
@@ -3535,23 +3561,19 @@ namespace Google.Apis.CloudMachineLearningEngine.v1.Data
         ///
         /// standard_v100
         ///
-        /// A machine equivalent to standard that also includes a single NVIDIA Tesla V100 GPU. The availability of
-        /// these GPUs is in the Beta launch stage.
+        /// A machine equivalent to standard that also includes a single NVIDIA Tesla V100 GPU.
         ///
         /// large_model_v100
         ///
-        /// A machine equivalent to large_model that also includes a single NVIDIA Tesla V100 GPU. The availability of
-        /// these GPUs is in the Beta launch stage.
+        /// A machine equivalent to large_model that also includes a single NVIDIA Tesla V100 GPU.
         ///
         /// complex_model_m_v100
         ///
-        /// A machine equivalent to complex_model_m that also includes four NVIDIA Tesla V100 GPUs. The availability of
-        /// these GPUs is in the Beta launch stage.
+        /// A machine equivalent to complex_model_m that also includes four NVIDIA Tesla V100 GPUs.
         ///
         /// complex_model_l_v100
         ///
-        /// A machine equivalent to complex_model_l that also includes eight NVIDIA Tesla V100 GPUs. The availability of
-        /// these GPUs is in the Beta launch stage.
+        /// A machine equivalent to complex_model_l that also includes eight NVIDIA Tesla V100 GPUs.
         ///
         /// cloud_tpu
         ///
@@ -3570,7 +3592,9 @@ namespace Google.Apis.CloudMachineLearningEngine.v1.Data
         /// cluster will be of the type specified in `parameter_server_type`.
         ///
         /// This value can only be used when `scale_tier` is set to `CUSTOM`.If you set this value, you must also set
-        /// `parameter_server_type`.</summary>
+        /// `parameter_server_type`.
+        ///
+        /// The default value is zero.</summary>
         [Newtonsoft.Json.JsonPropertyAttribute("parameterServerCount")]
         public virtual System.Nullable<long> ParameterServerCount { get; set; } 
 
@@ -3613,7 +3637,9 @@ namespace Google.Apis.CloudMachineLearningEngine.v1.Data
         /// will be of the type specified in `worker_type`.
         ///
         /// This value can only be used when `scale_tier` is set to `CUSTOM`. If you set this value, you must also set
-        /// `worker_type`.</summary>
+        /// `worker_type`.
+        ///
+        /// The default value is zero.</summary>
         [Newtonsoft.Json.JsonPropertyAttribute("workerCount")]
         public virtual System.Nullable<long> WorkerCount { get; set; } 
 

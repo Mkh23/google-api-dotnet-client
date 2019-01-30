@@ -26,7 +26,7 @@
  *      <tr><th>API
  *          <td><a href='https://cloud.google.com/tasks/'>Cloud Tasks API</a>
  *      <tr><th>API Version<td>v2beta3
- *      <tr><th>API Rev<td>20190104 (1464)
+ *      <tr><th>API Rev<td>20190118 (1478)
  *      <tr><th>API Docs
  *          <td><a href='https://cloud.google.com/tasks/'>
  *              https://cloud.google.com/tasks/</a>
@@ -1266,18 +1266,6 @@ namespace Google.Apis.CloudTasks.v2beta3
                     [Google.Apis.Util.RequestParameterAttribute("parent", Google.Apis.Util.RequestParameterType.Path)]
                     public virtual string Parent { get; private set; }
 
-                    /// <summary>`filter` can be used to specify a subset of queues. Any Queue field can be used as a
-                    /// filter and several operators as supported. For example: `<=, <, >=, >, !=, =, :`. The filter
-                    /// syntax is the same as described in [Stackdriver's Advanced Logs
-                    /// Filters](https://cloud.google.com/logging/docs/view/advanced_filters).
-                    ///
-                    /// Sample filter "state: PAUSED".
-                    ///
-                    /// Note that using filters might cause fewer queues than the requested page_size to be
-                    /// returned.</summary>
-                    [Google.Apis.Util.RequestParameterAttribute("filter", Google.Apis.Util.RequestParameterType.Query)]
-                    public virtual string Filter { get; set; }
-
                     /// <summary>A token identifying the page of results to return.
                     ///
                     /// To request the first page results, page_token must be empty. To request the next page of
@@ -1294,6 +1282,18 @@ namespace Google.Apis.CloudTasks.v2beta3
                     /// response to determine if more queues exist.</summary>
                     [Google.Apis.Util.RequestParameterAttribute("pageSize", Google.Apis.Util.RequestParameterType.Query)]
                     public virtual System.Nullable<int> PageSize { get; set; }
+
+                    /// <summary>`filter` can be used to specify a subset of queues. Any Queue field can be used as a
+                    /// filter and several operators as supported. For example: `<=, <, >=, >, !=, =, :`. The filter
+                    /// syntax is the same as described in [Stackdriver's Advanced Logs
+                    /// Filters](https://cloud.google.com/logging/docs/view/advanced_filters).
+                    ///
+                    /// Sample filter "state: PAUSED".
+                    ///
+                    /// Note that using filters might cause fewer queues than the requested page_size to be
+                    /// returned.</summary>
+                    [Google.Apis.Util.RequestParameterAttribute("filter", Google.Apis.Util.RequestParameterType.Query)]
+                    public virtual string Filter { get; set; }
 
 
                     ///<summary>Gets the method name.</summary>
@@ -1329,15 +1329,6 @@ namespace Google.Apis.CloudTasks.v2beta3
                                 Pattern = @"^projects/[^/]+/locations/[^/]+$",
                             });
                         RequestParameters.Add(
-                            "filter", new Google.Apis.Discovery.Parameter
-                            {
-                                Name = "filter",
-                                IsRequired = false,
-                                ParameterType = "query",
-                                DefaultValue = null,
-                                Pattern = null,
-                            });
-                        RequestParameters.Add(
                             "pageToken", new Google.Apis.Discovery.Parameter
                             {
                                 Name = "pageToken",
@@ -1350,6 +1341,15 @@ namespace Google.Apis.CloudTasks.v2beta3
                             "pageSize", new Google.Apis.Discovery.Parameter
                             {
                                 Name = "pageSize",
+                                IsRequired = false,
+                                ParameterType = "query",
+                                DefaultValue = null,
+                                Pattern = null,
+                            });
+                        RequestParameters.Add(
+                            "filter", new Google.Apis.Discovery.Parameter
+                            {
+                                Name = "filter",
                                 IsRequired = false,
                                 ParameterType = "query",
                                 DefaultValue = null,
@@ -2911,6 +2911,30 @@ namespace Google.Apis.CloudTasks.v2beta3.Data
         /// This count includes tasks which have been dispatched but haven't received a response.</summary>
         [Newtonsoft.Json.JsonPropertyAttribute("dispatchCount")]
         public virtual System.Nullable<int> DispatchCount { get; set; } 
+
+        /// <summary>The deadline for requests sent to the worker. If the worker does not respond by this deadline then
+        /// the request is cancelled and the attempt is marked as a `DEADLINE_EXCEEDED` failure. Cloud Tasks will retry
+        /// the task according to the RetryConfig.
+        ///
+        /// Note that when the request is cancelled, Cloud Tasks will stop listing for the response, but whether the
+        /// worker stops processing depends on the worker. For example, if the worker is stuck, it may not react to
+        /// cancelled requests.
+        ///
+        /// The default and maximum values depend on the type of request:
+        ///
+        /// * For App Engine tasks, 0 indicates that the request has the default deadline. The default deadline depends
+        /// on the [scaling type](https://cloud.google.com/appengine/docs/standard/go/how-instances-are-
+        /// managed#instance_scaling) of the service: 10 minutes for standard apps with automatic scaling, 24 hours for
+        /// standard apps with manual and basic scaling, and 60 minutes for flex apps. If the request deadline is set,
+        /// it must be in the interval [15 seconds, 24 hours 15 seconds]. Regardless of the task's `dispatch_deadline`,
+        /// the app handler will not run for longer than than the service's timeout. We recommend setting the
+        /// `dispatch_deadline` to at most a few seconds more than the app handler's timeout. For more information see
+        /// [Timeouts](https://cloud.google.com/tasks/docs/creating-appengine-handlers#timeouts).
+        ///
+        /// `dispatch_deadline` will be truncated to the nearest millisecond. The deadline is an approximate
+        /// deadline.</summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("dispatchDeadline")]
+        public virtual object DispatchDeadline { get; set; } 
 
         /// <summary>Output only. The status of the task's first attempt.
         ///

@@ -26,7 +26,7 @@
  *      <tr><th>API
  *          <td><a href='https://cloud.google.com/talent-solution/job-search/docs/'>Cloud Talent Solution API</a>
  *      <tr><th>API Version<td>v3
- *      <tr><th>API Rev<td>20181210 (1439)
+ *      <tr><th>API Rev<td>20190123 (1483)
  *      <tr><th>API Docs
  *          <td><a href='https://cloud.google.com/talent-solution/job-search/docs/'>
  *              https://cloud.google.com/talent-solution/job-search/docs/</a>
@@ -328,11 +328,110 @@ namespace Google.Apis.CloudTalentSolution.v3
         public ProjectsResource(Google.Apis.Services.IClientService service)
         {
             this.service = service;
+            clientEvents = new ClientEventsResource(service);
             companies = new CompaniesResource(service);
             jobs = new JobsResource(service);
 
         }
 
+        private readonly ClientEventsResource clientEvents;
+
+        /// <summary>Gets the ClientEvents resource.</summary>
+        public virtual ClientEventsResource ClientEvents
+        {
+            get { return clientEvents; }
+        }
+
+        /// <summary>The "clientEvents" collection of methods.</summary>
+        public class ClientEventsResource
+        {
+            private const string Resource = "clientEvents";
+
+            /// <summary>The service which this resource belongs to.</summary>
+            private readonly Google.Apis.Services.IClientService service;
+
+            /// <summary>Constructs a new resource.</summary>
+            public ClientEventsResource(Google.Apis.Services.IClientService service)
+            {
+                this.service = service;
+
+            }
+
+
+            /// <summary>Report events issued when end user interacts with customer's application that uses Cloud Talent
+            /// Solution. You may inspect the created events in [self service tools](https://console.cloud.google.com
+            /// /talent-solution/overview). [Learn more](https://cloud.google.com/talent-solution/job-search/docs
+            /// /management-tools) about self service tools.</summary>
+            /// <param name="body">The body of the request.</param>
+            /// <param name="parent">Parent project name.</param>
+            public virtual CreateRequest Create(Google.Apis.CloudTalentSolution.v3.Data.CreateClientEventRequest body, string parent)
+            {
+                return new CreateRequest(service, body, parent);
+            }
+
+            /// <summary>Report events issued when end user interacts with customer's application that uses Cloud Talent
+            /// Solution. You may inspect the created events in [self service tools](https://console.cloud.google.com
+            /// /talent-solution/overview). [Learn more](https://cloud.google.com/talent-solution/job-search/docs
+            /// /management-tools) about self service tools.</summary>
+            public class CreateRequest : CloudTalentSolutionBaseServiceRequest<Google.Apis.CloudTalentSolution.v3.Data.ClientEvent>
+            {
+                /// <summary>Constructs a new Create request.</summary>
+                public CreateRequest(Google.Apis.Services.IClientService service, Google.Apis.CloudTalentSolution.v3.Data.CreateClientEventRequest body, string parent)
+                    : base(service)
+                {
+                    Parent = parent;
+                    Body = body;
+                    InitParameters();
+                }
+
+
+                /// <summary>Parent project name.</summary>
+                [Google.Apis.Util.RequestParameterAttribute("parent", Google.Apis.Util.RequestParameterType.Path)]
+                public virtual string Parent { get; private set; }
+
+
+                /// <summary>Gets or sets the body of this request.</summary>
+                Google.Apis.CloudTalentSolution.v3.Data.CreateClientEventRequest Body { get; set; }
+
+                ///<summary>Returns the body of the request.</summary>
+                protected override object GetBody() { return Body; }
+
+                ///<summary>Gets the method name.</summary>
+                public override string MethodName
+                {
+                    get { return "create"; }
+                }
+
+                ///<summary>Gets the HTTP method.</summary>
+                public override string HttpMethod
+                {
+                    get { return "POST"; }
+                }
+
+                ///<summary>Gets the REST path.</summary>
+                public override string RestPath
+                {
+                    get { return "v3/{+parent}/clientEvents"; }
+                }
+
+                /// <summary>Initializes Create parameter list.</summary>
+                protected override void InitParameters()
+                {
+                    base.InitParameters();
+
+                    RequestParameters.Add(
+                        "parent", new Google.Apis.Discovery.Parameter
+                        {
+                            Name = "parent",
+                            IsRequired = true,
+                            ParameterType = "path",
+                            DefaultValue = null,
+                            Pattern = @"^projects/[^/]+$",
+                        });
+                }
+
+            }
+        }
         private readonly CompaniesResource companies;
 
         /// <summary>Gets the Companies resource.</summary>
@@ -1131,12 +1230,6 @@ namespace Google.Apis.CloudTalentSolution.v3
 
                 /// <summary>Optional.
                 ///
-                /// The starting point of a query result.</summary>
-                [Google.Apis.Util.RequestParameterAttribute("pageToken", Google.Apis.Util.RequestParameterType.Query)]
-                public virtual string PageToken { get; set; }
-
-                /// <summary>Optional.
-                ///
                 /// The maximum number of jobs to be returned per page of results.
                 ///
                 /// If job_view is set to JobView.JOB_VIEW_ID_ONLY, the maximum allowed page size is 1000. Otherwise,
@@ -1188,6 +1281,12 @@ namespace Google.Apis.CloudTalentSolution.v3
                     JOBVIEWFULL,
                 }
 
+                /// <summary>Optional.
+                ///
+                /// The starting point of a query result.</summary>
+                [Google.Apis.Util.RequestParameterAttribute("pageToken", Google.Apis.Util.RequestParameterType.Query)]
+                public virtual string PageToken { get; set; }
+
 
                 ///<summary>Gets the method name.</summary>
                 public override string MethodName
@@ -1222,15 +1321,6 @@ namespace Google.Apis.CloudTalentSolution.v3
                             Pattern = @"^projects/[^/]+$",
                         });
                     RequestParameters.Add(
-                        "pageToken", new Google.Apis.Discovery.Parameter
-                        {
-                            Name = "pageToken",
-                            IsRequired = false,
-                            ParameterType = "query",
-                            DefaultValue = null,
-                            Pattern = null,
-                        });
-                    RequestParameters.Add(
                         "pageSize", new Google.Apis.Discovery.Parameter
                         {
                             Name = "pageSize",
@@ -1252,6 +1342,15 @@ namespace Google.Apis.CloudTalentSolution.v3
                         "jobView", new Google.Apis.Discovery.Parameter
                         {
                             Name = "jobView",
+                            IsRequired = false,
+                            ParameterType = "query",
+                            DefaultValue = null,
+                            Pattern = null,
+                        });
+                    RequestParameters.Add(
+                        "pageToken", new Google.Apis.Discovery.Parameter
+                        {
+                            Name = "pageToken",
                             IsRequired = false,
                             ParameterType = "query",
                             DefaultValue = null,
@@ -1556,6 +1655,51 @@ namespace Google.Apis.CloudTalentSolution.v3
             [Google.Apis.Util.RequestParameterAttribute("name", Google.Apis.Util.RequestParameterType.Path)]
             public virtual string Name { get; private set; }
 
+            /// <summary>Optional.
+            ///
+            /// The list of languages of the query. This is the BCP-47 language code, such as "en-US" or "sr-Latn". For
+            /// more information, see [Tags for Identifying Languages](https://tools.ietf.org/html/bcp47).
+            ///
+            /// For CompletionType.JOB_TITLE type, only open jobs with the same language_codes are returned.
+            ///
+            /// For CompletionType.COMPANY_NAME type, only companies having open jobs with the same language_codes are
+            /// returned.
+            ///
+            /// For CompletionType.COMBINED type, only open jobs with the same language_codes or companies having open
+            /// jobs with the same language_codes are returned.
+            ///
+            /// The maximum number of allowed characters is 255.</summary>
+            [Google.Apis.Util.RequestParameterAttribute("languageCodes", Google.Apis.Util.RequestParameterType.Query)]
+            public virtual Google.Apis.Util.Repeatable<string> LanguageCodes { get; set; }
+
+            /// <summary>Optional.
+            ///
+            /// If provided, restricts completion to specified company.
+            ///
+            /// The format is "projects/{project_id}/companies/{company_id}", for example, "projects/api-test-
+            /// project/companies/foo".</summary>
+            [Google.Apis.Util.RequestParameterAttribute("companyName", Google.Apis.Util.RequestParameterType.Query)]
+            public virtual string CompanyName { get; set; }
+
+            /// <summary>Optional.
+            ///
+            /// The scope of the completion. The defaults is CompletionScope.PUBLIC.</summary>
+            [Google.Apis.Util.RequestParameterAttribute("scope", Google.Apis.Util.RequestParameterType.Query)]
+            public virtual System.Nullable<ScopeEnum> Scope { get; set; }
+
+            /// <summary>Optional.
+            ///
+            /// The scope of the completion. The defaults is CompletionScope.PUBLIC.</summary>
+            public enum ScopeEnum
+            {
+                [Google.Apis.Util.StringValueAttribute("COMPLETION_SCOPE_UNSPECIFIED")]
+                COMPLETIONSCOPEUNSPECIFIED,
+                [Google.Apis.Util.StringValueAttribute("TENANT")]
+                TENANT,
+                [Google.Apis.Util.StringValueAttribute("PUBLIC")]
+                PUBLIC__,
+            }
+
             /// <summary>Required.
             ///
             /// Completion result count.
@@ -1612,51 +1756,6 @@ namespace Google.Apis.CloudTalentSolution.v3
                 COMBINED,
             }
 
-            /// <summary>Optional.
-            ///
-            /// The list of languages of the query. This is the BCP-47 language code, such as "en-US" or "sr-Latn". For
-            /// more information, see [Tags for Identifying Languages](https://tools.ietf.org/html/bcp47).
-            ///
-            /// For CompletionType.JOB_TITLE type, only open jobs with the same language_codes are returned.
-            ///
-            /// For CompletionType.COMPANY_NAME type, only companies having open jobs with the same language_codes are
-            /// returned.
-            ///
-            /// For CompletionType.COMBINED type, only open jobs with the same language_codes or companies having open
-            /// jobs with the same language_codes are returned.
-            ///
-            /// The maximum number of allowed characters is 255.</summary>
-            [Google.Apis.Util.RequestParameterAttribute("languageCodes", Google.Apis.Util.RequestParameterType.Query)]
-            public virtual Google.Apis.Util.Repeatable<string> LanguageCodes { get; set; }
-
-            /// <summary>Optional.
-            ///
-            /// If provided, restricts completion to specified company.
-            ///
-            /// The format is "projects/{project_id}/companies/{company_id}", for example, "projects/api-test-
-            /// project/companies/foo".</summary>
-            [Google.Apis.Util.RequestParameterAttribute("companyName", Google.Apis.Util.RequestParameterType.Query)]
-            public virtual string CompanyName { get; set; }
-
-            /// <summary>Optional.
-            ///
-            /// The scope of the completion. The defaults is CompletionScope.PUBLIC.</summary>
-            [Google.Apis.Util.RequestParameterAttribute("scope", Google.Apis.Util.RequestParameterType.Query)]
-            public virtual System.Nullable<ScopeEnum> Scope { get; set; }
-
-            /// <summary>Optional.
-            ///
-            /// The scope of the completion. The defaults is CompletionScope.PUBLIC.</summary>
-            public enum ScopeEnum
-            {
-                [Google.Apis.Util.StringValueAttribute("COMPLETION_SCOPE_UNSPECIFIED")]
-                COMPLETIONSCOPEUNSPECIFIED,
-                [Google.Apis.Util.StringValueAttribute("TENANT")]
-                TENANT,
-                [Google.Apis.Util.StringValueAttribute("PUBLIC")]
-                PUBLIC__,
-            }
-
 
             ///<summary>Gets the method name.</summary>
             public override string MethodName
@@ -1691,6 +1790,33 @@ namespace Google.Apis.CloudTalentSolution.v3
                         Pattern = @"^projects/[^/]+$",
                     });
                 RequestParameters.Add(
+                    "languageCodes", new Google.Apis.Discovery.Parameter
+                    {
+                        Name = "languageCodes",
+                        IsRequired = false,
+                        ParameterType = "query",
+                        DefaultValue = null,
+                        Pattern = null,
+                    });
+                RequestParameters.Add(
+                    "companyName", new Google.Apis.Discovery.Parameter
+                    {
+                        Name = "companyName",
+                        IsRequired = false,
+                        ParameterType = "query",
+                        DefaultValue = null,
+                        Pattern = null,
+                    });
+                RequestParameters.Add(
+                    "scope", new Google.Apis.Discovery.Parameter
+                    {
+                        Name = "scope",
+                        IsRequired = false,
+                        ParameterType = "query",
+                        DefaultValue = null,
+                        Pattern = null,
+                    });
+                RequestParameters.Add(
                     "pageSize", new Google.Apis.Discovery.Parameter
                     {
                         Name = "pageSize",
@@ -1721,33 +1847,6 @@ namespace Google.Apis.CloudTalentSolution.v3
                     "type", new Google.Apis.Discovery.Parameter
                     {
                         Name = "type",
-                        IsRequired = false,
-                        ParameterType = "query",
-                        DefaultValue = null,
-                        Pattern = null,
-                    });
-                RequestParameters.Add(
-                    "languageCodes", new Google.Apis.Discovery.Parameter
-                    {
-                        Name = "languageCodes",
-                        IsRequired = false,
-                        ParameterType = "query",
-                        DefaultValue = null,
-                        Pattern = null,
-                    });
-                RequestParameters.Add(
-                    "companyName", new Google.Apis.Discovery.Parameter
-                    {
-                        Name = "companyName",
-                        IsRequired = false,
-                        ParameterType = "query",
-                        DefaultValue = null,
-                        Pattern = null,
-                    });
-                RequestParameters.Add(
-                    "scope", new Google.Apis.Discovery.Parameter
-                    {
-                        Name = "scope",
                         IsRequired = false,
                         ParameterType = "query",
                         DefaultValue = null,
@@ -1851,6 +1950,57 @@ namespace Google.Apis.CloudTalentSolution.v3.Data
         public virtual string ETag { get; set; }
     }    
 
+    /// <summary>An event issued when an end user interacts with the application that implements Cloud Talent Solution.
+    /// Providing this information improves the quality of search and recommendation for the API clients, enabling the
+    /// service to perform optimally. The number of events sent must be consistent with other calls, such as job
+    /// searches, issued to the service by the client.</summary>
+    public class ClientEvent : Google.Apis.Requests.IDirectResponseSchema
+    {
+        /// <summary>Required.
+        ///
+        /// The timestamp of the event.</summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("createTime")]
+        public virtual object CreateTime { get; set; } 
+
+        /// <summary>Required.
+        ///
+        /// A unique identifier, generated by the client application. This `event_id` is used to establish the
+        /// relationship between different events (see parent_event_id).</summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("eventId")]
+        public virtual string EventId { get; set; } 
+
+        /// <summary>Optional.
+        ///
+        /// Extra information about this event. Used for storing information with no matching field in event payload,
+        /// for example, user application specific context or details.
+        ///
+        /// At most 20 keys are supported. The maximum total size of all keys and values is 2 KB.</summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("extraInfo")]
+        public virtual System.Collections.Generic.IDictionary<string,string> ExtraInfo { get; set; } 
+
+        /// <summary>A event issued when a job seeker interacts with the application that implements Cloud Talent
+        /// Solution.</summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("jobEvent")]
+        public virtual JobEvent JobEvent { get; set; } 
+
+        /// <summary>Required except the first event.
+        ///
+        /// The event_id of an event that resulted in the current event. For example, a Job view event usually follows a
+        /// parent impression event: A job seeker first does a search where a list of jobs appears (impression). The job
+        /// seeker then selects a result and views the description of a particular job (Job view).</summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("parentEventId")]
+        public virtual string ParentEventId { get; set; } 
+
+        /// <summary>Required.
+        ///
+        /// A unique ID generated in the API responses. It can be found in ResponseMetadata.request_id.</summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("requestId")]
+        public virtual string RequestId { get; set; } 
+
+        /// <summary>The ETag of the item.</summary>
+        public virtual string ETag { get; set; }
+    }    
+
     /// <summary>Input only.
     ///
     /// Parameters needed for commute search.</summary>
@@ -1871,7 +2021,7 @@ namespace Google.Apis.CloudTalentSolution.v3.Data
 
         /// <summary>Optional.
         ///
-        /// The departure time used to calculate traffic impact, represented as .google.type.TimeOfDay in local time
+        /// The departure time used to calculate traffic impact, represented as google.type.TimeOfDay in local time
         /// zone.
         ///
         /// Currently traffic model is restricted to hour level resolution.</summary>
@@ -2244,6 +2394,19 @@ namespace Google.Apis.CloudTalentSolution.v3.Data
         /// <summary>The completion topic.</summary>
         [Newtonsoft.Json.JsonPropertyAttribute("type")]
         public virtual string Type { get; set; } 
+
+        /// <summary>The ETag of the item.</summary>
+        public virtual string ETag { get; set; }
+    }    
+
+    /// <summary>The report event request.</summary>
+    public class CreateClientEventRequest : Google.Apis.Requests.IDirectResponseSchema
+    {
+        /// <summary>Required.
+        ///
+        /// Events issued when end user interacts with customer's application that uses Cloud Talent Solution.</summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("clientEvent")]
+        public virtual ClientEvent ClientEvent { get; set; } 
 
         /// <summary>The ETag of the item.</summary>
         public virtual string ETag { get; set; }
@@ -2670,9 +2833,8 @@ namespace Google.Apis.CloudTalentSolution.v3.Data
         ///
         /// The job PostingRegion (for example, state, country) throughout which the job is available. If this field is
         /// set, a LocationFilter in a search query within the job region finds this job posting if an exact location
-        /// match is not specified. If this field is set to PostingRegion.NATION_WIDE or
-        /// [PostingRegion.ADMINISTRATIVE_AREA], setting job addresses to the same location level as this field is
-        /// strongly recommended.</summary>
+        /// match isn't specified. If this field is set to PostingRegion.NATION or PostingRegion.ADMINISTRATIVE_AREA,
+        /// setting job Job.addresses to the same location level as this field is strongly recommended.</summary>
         [Newtonsoft.Json.JsonPropertyAttribute("postingRegion")]
         public virtual string PostingRegion { get; set; } 
 
@@ -2765,6 +2927,28 @@ namespace Google.Apis.CloudTalentSolution.v3.Data
         /// locations are exactly matched to Job.addresses in the same order.</summary>
         [Newtonsoft.Json.JsonPropertyAttribute("locations")]
         public virtual System.Collections.Generic.IList<Location> Locations { get; set; } 
+
+        /// <summary>The ETag of the item.</summary>
+        public virtual string ETag { get; set; }
+    }    
+
+    /// <summary>An event issued when a job seeker interacts with the application that implements Cloud Talent
+    /// Solution.</summary>
+    public class JobEvent : Google.Apis.Requests.IDirectResponseSchema
+    {
+        /// <summary>Required.
+        ///
+        /// The job name(s) associated with this event. For example, if this is an impression event, this field contains
+        /// the identifiers of all jobs shown to the job seeker. If this was a view event, this field contains the
+        /// identifier of the viewed job.</summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("jobs")]
+        public virtual System.Collections.Generic.IList<string> Jobs { get; set; } 
+
+        /// <summary>Required.
+        ///
+        /// The type of the event (see JobEventType).</summary>
+        [Newtonsoft.Json.JsonPropertyAttribute("type")]
+        public virtual string Type { get; set; } 
 
         /// <summary>The ETag of the item.</summary>
         public virtual string ETag { get; set; }
